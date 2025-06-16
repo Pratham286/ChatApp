@@ -21,7 +21,14 @@ const messageSchema = new Schema({
         ref: "User",
       },
     ],
-    
+    edited: {
+      type: Boolean,
+      default: false,
+    },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
 }, {timestamps: true});
 
 export const Message = model("Message", messageSchema);

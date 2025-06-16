@@ -33,7 +33,7 @@ export const userChat = async (req, res) => {
       })
       .populate({
         path: "chatMessage",
-        options: { sort: { createdAt: -1 }, limit: 1 },
+        options: { sort: { createdAt: -1 },  },
         populate: {
           path: "sender",
           select: "username",
@@ -185,8 +185,9 @@ export const removeUser = async (req, res) => {
 export const makeAdmin = async (req, res) => {
   try {
     const myId = req.user.id
-    const { userId } = req.body;
+    const { userId } = req.body; 
     const chatId = req.params.id;
+    console.log(userId)
     if (!chatId || !userId) {
       return res
       .status(400)
@@ -212,7 +213,8 @@ export const makeAdmin = async (req, res) => {
     
     return res.status(200).json({ message: "User is promoted to group admin" });
   } catch (error) {
-    return res.status(500).json({ message: error });
+    console.log(error)
+    return res.status(500).json({ message: error.data});
   }
 };
 export const removeAdmin = async (req, res) => {

@@ -20,7 +20,7 @@ const Chat = () => {
           `http://localhost:3000/chat/userchat`,
           { withCredentials: true }
         );
-        // console.log(response.data.chatDetails);
+        console.log(response.data.chatDetails);
         setUserChats(response.data.chatDetails);
       } catch (error) {
         console.log("Error: ", error);

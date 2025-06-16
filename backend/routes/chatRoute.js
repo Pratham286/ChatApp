@@ -10,10 +10,10 @@ router.get("/userchat", verifyToken, userChat);
 router.get("/get/:id", verifyToken, chatFromId)
 router.delete("/delete/:id", verifyToken, deleteChat)
 router.put("/leavegroup/:id", verifyToken, exitChat)
-router.put("/removeUser/:id", verifyToken, removeUser)
+router.put("/removeuser/:id", verifyToken, removeUser)
 router.put("/addgroup/:id", verifyToken, addToChat, addToChat)
-router.put("/makeGroupAdmin/:id", verifyToken, makeAdmin)
-router.put("/makeGroupAdmin/:id", verifyToken, removeAdmin)
+router.put("/makegroupadmin/:id", verifyToken, makeAdmin)
+router.put("/removegroupadmin/:id", verifyToken, removeAdmin)
 // router.get("/")
 
 export default router;
