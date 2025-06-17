@@ -56,11 +56,18 @@ const ChatDetails = () => {
   //   console.log(chatMembers);
   const handleProfile = (u) => {
     const userId = u._id;
-    navigate("/userprofile", {
-      state: {
-        userId: userId,
-      },
-    });
+    if(userId === user._id)
+    {
+      navigate("/profile");
+
+    }
+    else{
+      navigate("/userprofile", {
+        state: {
+          userId: userId,
+        },
+      });
+    }
   };
   
   // const chatMemberId = 
