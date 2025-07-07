@@ -1,11 +1,11 @@
 import axios from "axios";
-// import { Socket } from "net";
 import { io, Socket } from "socket.io-client";
 import React from "react";
 import { useState } from "react";
 import { useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMyContext } from "../context/ContextProvider";
+import { ArrowLeft, Send, MoreVertical, Edit3, Trash2, X, Check } from "lucide-react";
 
 const FullChat = () => {
   const location = useLocation();
@@ -21,7 +21,8 @@ const FullChat = () => {
   const [typingUser, setTypingUser] = useState("Someone");
 
   const [messageAction, setMessageAction] = useState(false);
-  const [msgId, setMsgId] =useState("")
+  const [msgId, setMsgId] = useState("")
+  const [hoveredMessage, setHoveredMessage] = useState(null);
 
   const [editMessage, setEditMessage] = useState("");
   const [isEdit, setIsEdit] = useState(false);
@@ -155,176 +156,305 @@ const FullChat = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-full max-w-2xl border border-gray-300 p-4 bg-white rounded-lg shadow">
-        <div
-          onClick={() => {
-            navigate("/chatdetails", { state: { chat: chat } });
-          }}
-        >
-          <h2 className="text-xl font-semibold mb-4">{chat?.chatName}</h2>
-        </div>
-
-        <div className="h-96 overflow-y-auto border border-gray-200 p-3 rounded mb-4 bg-gray-100">
-          {chat?.chatMessage?.length ? (
-            chat.chatMessage.map((msg, i) => {
-              const isMyMessage = String(msg.sender?._id) === String(user._id);
-              return (
-                <div
-                  key={i}
-                  className={`mb-2 p-2 rounded max-w-[75%] relative ${
-                    isMyMessage
-                      ? "bg-blue-500 text-white self-end ml-auto text-right"
-                      : "bg-gray-300 text-black self-start mr-auto text-left"
-                  }`}
-                >
-                  {msg.deleted ? <p className="text-sm break-words h-10">This message this deleted</p> : <div>
-                     <p className="text-sm break-words">{msg.content}
-                    {msg.edited && <>  (edited)</>}
-                  </p>
-                  <p className="text-xs text-gray-100 mt-1">
-                    {isMyMessage ? "You" : msg.sender?.username || "Unknown"}
-                    
-                  </p>
-                    </div>} 
-                 
-                  <div>
-                    {isMyMessage && (
-                      <button
-                        onClick={() => {
-                          setMsgId(msg._id)
-                          setMessageAction(true);
-                        }}
-                        className="absolute left-2 bottom-2.25 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-                      >
-                        ⋮
-                      </button>
-                    )}
-                    {messageAction && (
-                      <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-                        <div className="flex items-center m-3">
-                          <button
-                            type="button"
-                            className="bg-blue-700 rounded text-white px-2 py-1 mx-1"
-                            onClick={() => {
-                              setIsEdit(true);
-                            }}
-                          >
-                            Edit Message
-                          </button>
-                          <button
-                            type="button"
-                            className="bg-blue-700 rounded text-white px-2 py-1 mx-1"
-                            onClick={() => {setIsDelete(true)}}
-                          >
-                            Delete Message
-                          </button>
-                          <button
-                            onClick={() => setMessageAction(false)}
-                            type="button"
-                            className="bg-red-700 rounded text-white px-2 py-1 mx-1"
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                    {isEdit && (
-                      <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-                        <div className="bg-black p-6 rounded shadow-lg w-96">
-                          <h2 className="text-xl font-semibold mb-4">
-                            Edit Message
-                          </h2>
-                          <form
-                            onSubmit={(e) => handleEdit({e, msgId: msgId})}
-                            className=""
-                          >
-                            <div className="mb-3">
-                              <label className="block mb-1">Message</label>
-                              <input
-                                value={editMessage}
-                                onChange={(e) => setEditMessage(e.target.value)}
-                                type="text"
-                                className="w-full border px-3 py-2 rounded"
-                              />
-                            </div>
-                            <div className="flex justify-end">
-                              <button
-                                type="button"
-                                onClick={() => {setIsEdit(false)
-                                  setEditMessage("");
-                                }}
-                                className="bg-gray-500 text-white px-3 py-1 rounded mr-2 hover:bg-gray-600"
-                                >
-                                Cancel
-                              </button>
-                              <button
-                                type="submit"
-                                className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
-                                // onClick={() => {handleEdit}}
-                              >
-                                Edit
-                              </button>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                    )}
-                    {isDelete && (
-                      <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-                        <div className="bg-black p-6 rounded shadow-lg w-96">
-                          <h2 className="text-xl font-semibold mb-4">
-                            Delete Message
-                          </h2>
-                          <button
-                            type="button"
-                            onClick={() => setIsDelete(false)}
-                            className="bg-gray-500 text-white px-3 py-1 rounded mr-2 hover:bg-gray-600"
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            type="submit"
-                            className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
-                            onClick={(e) => handleDelete({e, msgId: msgId})}
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            <p className="text-gray-500 text-sm">No messages yet.</p>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-        <div>
-          {isOtherTyping && (
-            <p className="text-sm text-gray-500 italic mb-2">
-              {typingUser} is typing...
-            </p>
-          )}
-        </div>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={messageText}
-            onChange={handleTyping}
-            className="flex-grow px-3 py-2 border border-gray-300 rounded"
-            placeholder="Type your message..."
-          />
-          <button
-            onClick={sendMessage}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-          >
-            Send
-          </button>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex flex-col">
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-4xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => navigate("/chats")}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
+              >
+                <ArrowLeft className="h-6 w-6 text-gray-600" />
+              </button>
+              <div
+                onClick={() => {
+                  navigate("/chatdetails", { state: { chat: chat } });
+                }}
+                className="cursor-pointer"
+              >
+                <h2 className="text-xl font-bold text-gray-900">
+                  {chat?.chatName || 'Loading...'}
+                </h2>
+                <p className="text-sm text-gray-500">
+                  {chat?.chatMember?.length || 0} members
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Messages Container */}
+      <div className="flex-1 max-w-4xl mx-auto w-full px-4 py-6">
+        <div className="bg-white rounded-2xl shadow-lg h-full flex flex-col">
+          {/* Messages Area */}
+          <div className="flex-1 overflow-y-auto p-6 space-y-4">
+            {chat?.chatMessage?.length ? (
+              chat.chatMessage.map((msg, i) => {
+                const isMyMessage = String(msg.sender?._id) === String(user._id);
+                return (
+                  <div
+                    key={i}
+                    className={`flex ${isMyMessage ? 'justify-end' : 'justify-start'}`}
+                    onMouseEnter={() => setHoveredMessage(i)}
+                    onMouseLeave={() => setHoveredMessage(null)}
+                  >
+                    <div className="flex items-center space-x-2 group">
+                      {/* Action Button - Show on left for my messages */}
+                      {isMyMessage && !msg.deleted && (
+                        <button
+                          onClick={() => {
+                            setMsgId(msg._id);
+                            setMessageAction(true);
+                          }}
+                          className={`p-2 rounded-full bg-white shadow-md hover:bg-gray-50 transition-all duration-200 ${
+                            hoveredMessage === i ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                          }`}
+                        >
+                          <MoreVertical className="h-4 w-4 text-gray-600" />
+                        </button>
+                      )}
+
+                      <div
+                        className={`relative max-w-[75%] rounded-2xl px-4 py-3 shadow-sm ${
+                          isMyMessage
+                            ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+                            : "bg-gray-100 text-gray-900"
+                        }`}
+                      >
+                        {msg.deleted ? (
+                          <div>
+                            <p className="text-sm italic opacity-70 break-words leading-relaxed">
+                              This message was deleted
+                            </p>
+                            <p className={`text-xs mt-1 ${
+                              isMyMessage ? 'text-blue-100' : 'text-gray-500'
+                            }`}>
+                              {isMyMessage ? "You" : msg.sender?.username || "Unknown"}
+                            </p>
+                          </div>
+                        ) : (
+                          <div>
+                            <p className="text-sm break-words leading-relaxed">
+                              {msg.content}
+                              {msg.edited && (
+                                <span className="text-xs opacity-70 ml-2">
+                                  (edited)
+                                </span>
+                              )}
+                            </p>
+                            <p className={`text-xs mt-1 ${
+                              isMyMessage ? 'text-blue-100' : 'text-gray-500'
+                            }`}>
+                              {isMyMessage ? "You" : msg.sender?.username || "Unknown"}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-gray-500 text-lg">No messages yet.</p>
+                <p className="text-gray-400 text-sm mt-2">
+                  Start the conversation by sending a message!
+                </p>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Typing Indicator */}
+          {isOtherTyping && (
+            <div className="px-6 py-2 border-t border-gray-100">
+              <div className="flex items-center space-x-2">
+                <div className="flex space-x-1">
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                </div>
+                <p className="text-sm text-gray-500">
+                  {typingUser} is typing...
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Message Input */}
+          <div className="p-6 border-t border-gray-100">
+            <div className="flex items-center space-x-4">
+              <div className="flex-1 relative">
+                <input
+                  type="text"
+                  value={messageText}
+                  onChange={handleTyping}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      sendMessage();
+                    }
+                  }}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  placeholder="Type your message..."
+                />
+              </div>
+              <button
+                onClick={sendMessage}
+                disabled={!messageText.trim()}
+                className={`p-3 rounded-xl transition-all duration-200 ${
+                  messageText.trim()
+                    ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl'
+                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                }`}
+              >
+                <Send className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Message Action Modal */}
+      {messageAction && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Message Actions
+              </h3>
+              <div className="space-y-3">
+                <button
+                  onClick={() => {
+                    setIsEdit(true);
+                    setMessageAction(false);
+                  }}
+                  className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-blue-50 transition-colors duration-200"
+                >
+                  <Edit3 className="h-5 w-5 text-blue-600" />
+                  <span className="text-gray-700">Edit Message</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setIsDelete(true);
+                    setMessageAction(false);
+                  }}
+                  className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-red-50 transition-colors duration-200"
+                >
+                  <Trash2 className="h-5 w-5 text-red-600" />
+                  <span className="text-gray-700">Delete Message</span>
+                </button>
+              </div>
+            </div>
+            <div className="border-t border-gray-200 p-4">
+              <button
+                onClick={() => setMessageAction(false)}
+                className="w-full px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Message Modal */}
+      {isEdit && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold text-gray-900">Edit Message</h3>
+                <button
+                  onClick={() => {
+                    setIsEdit(false);
+                    setEditMessage("");
+                  }}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
+                >
+                  <X className="h-5 w-5 text-gray-500" />
+                </button>
+              </div>
+              <form onSubmit={(e) => handleEdit({e, msgId: msgId})}>
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Message
+                  </label>
+                  <textarea
+                    value={editMessage}
+                    onChange={(e) => setEditMessage(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"
+                    rows="3"
+                    placeholder="Enter your message..."
+                  />
+                </div>
+                <div className="flex justify-end space-x-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsEdit(false);
+                      setEditMessage("");
+                    }}
+                    className="px-6 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 flex items-center space-x-2"
+                  >
+                    <Check className="h-4 w-4" />
+                    <span>Save</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Message Modal */}
+      {isDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold text-gray-900">Delete Message</h3>
+                <button
+                  onClick={() => setIsDelete(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
+                >
+                  <X className="h-5 w-5 text-gray-500" />
+                </button>
+              </div>
+              <p className="text-gray-600 mb-6">
+                Are you sure you want to delete this message? This action cannot be undone.
+              </p>
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={() => setIsDelete(false)}
+                  className="px-6 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={(e) => {
+                    handleDelete({e, msgId: msgId});
+                    setIsDelete(false);
+                  }}
+                  className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors duration-200 flex items-center space-x-2"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  <span>Delete</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
