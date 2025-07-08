@@ -2,7 +2,6 @@ import React from 'react';
 import { MessageCircle, Users, ChevronRight } from 'lucide-react';
 
 const ChatBar = ({ chatName, chatLastmsg, handleClick, isGroupChat = false }) => {
-  // Function to get initials for avatar
   const getInitials = (name) => {
     if (!name) return '?';
     return name
@@ -20,21 +19,19 @@ const ChatBar = ({ chatName, chatLastmsg, handleClick, isGroupChat = false }) =>
     return message.substring(0, maxLength) + '...';
   };
 
-  // Function to format timestamp (you can pass this as prop if needed)
-  const formatTime = () => {
-    const now = new Date();
-    return now.toLocaleTimeString('en-US', { 
-      hour: '2-digit', 
-      minute: '2-digit',
-      hour12: false 
-    });
-  };
-
   return (
     <div 
       onClick={handleClick}
       className="w-full p-6 cursor-pointer hover:bg-gray-50 transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
     >
+        <div className="flex items-center space-x-2">
+          {isGroupChat && (
+            <div className="flex items-center space-x-1 text-xs text-gray-500  pl-2 pb-3">
+              <Users className="h-3 w-3" />
+              <span>Group Chat</span>
+            </div>
+          )}
+        </div>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4 flex-1 min-w-0">
           {/* Avatar */}
@@ -59,9 +56,6 @@ const ChatBar = ({ chatName, chatLastmsg, handleClick, isGroupChat = false }) =>
               <h3 className="font-semibold text-gray-900 truncate text-lg">
                 {chatName || 'Unknown User'}
               </h3>
-              <span className="text-xs text-gray-500 ml-2 flex-shrink-0">
-                {formatTime()}
-              </span>
             </div>
             <p className="text-gray-600 text-sm truncate leading-relaxed">
               {truncateMessage(chatLastmsg) || 'No messages yet'}
@@ -76,19 +70,8 @@ const ChatBar = ({ chatName, chatLastmsg, handleClick, isGroupChat = false }) =>
       </div>
 
       {/* Optional: Online indicator or unread badge */}
-      <div className="flex items-center justify-between mt-3">
-        <div className="flex items-center space-x-2">
-          {isGroupChat && (
-            <div className="flex items-center space-x-1 text-xs text-gray-500">
-              <Users className="h-3 w-3" />
-              <span>Group Chat</span>
-            </div>
-          )}
-        </div>
         
-        {/* Unread badge placeholder - you can add unread count prop */}
-        {/* <div className="w-2 h-2 bg-blue-500 rounded-full"></div> */}
-      </div>
+        
     </div>
   );
 };

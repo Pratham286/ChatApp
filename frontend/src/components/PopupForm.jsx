@@ -1,3 +1,4 @@
+//checked
 import React, { useState } from "react";
 import { useMyContext } from "../context/ContextProvider";
 import SearchedUserProfile from "./SearchedUserProfile";
@@ -54,17 +55,16 @@ const Popup = ({ showForm, setShowForm }) => {
   return (
     showForm && (
       <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-hidden transform transition-all duration-300 ease-out">
+        <div className="bg-white rounded-xl shadow-md w-full max-w-md max-h-[90vh] overflow-hidden transform transition-all duration-300 ease-out">
           {/* Header */}
           <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
-            <h2 className="text-2xl font-bold text-white">Create New Group</h2>
-            <p className="text-blue-100 text-sm mt-1">Connect with your friends in a new group chat</p>
+            <h2 className="text-2xl font-bold text-white text-center">Create New Group</h2>
           </div>
           
           <form onSubmit={createGroup} className="flex flex-col h-full">
             {/* Group Name Input */}
-            <div className="p-6 border-b border-gray-100">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <div className="flex px-3 py-6 border-b border-gray-100">
+              <label className="text-sm font-semibold text-gray-700 mr-2">
                 Group Name
               </label>
               <input
@@ -74,7 +74,7 @@ const Popup = ({ showForm, setShowForm }) => {
                 }}
                 type="text"
                 placeholder="Enter group name..."
-                className="w-full border-2 border-gray-200 px-4 py-3 rounded-lg focus:border-blue-500 focus:outline-none transition-colors duration-200 text-gray-700"
+                className="w-full border-2 border-gray-200 px-2 py-3 rounded-lg focus:border-blue-500 focus:outline-none transition-colors duration-200 text-gray-700"
               />
             </div>
 
@@ -83,7 +83,7 @@ const Popup = ({ showForm, setShowForm }) => {
               <div className="px-6 py-4 bg-gray-50 border-b border-gray-100">
                 <h3 className="text-sm font-semibold text-gray-700 flex items-center">
                   <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-                  Select Friends ({addedUser.length - 1} selected)
+                  Select Friends ({addedUser.length -1} selected)
                 </h3>
               </div>
               
@@ -102,11 +102,6 @@ const Popup = ({ showForm, setShowForm }) => {
                   </div>
                 ) : (
                   <div className="p-6 text-center text-gray-500">
-                    <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
-                    </div>
                     <p className="text-sm">No friends available</p>
                   </div>
                 )}
@@ -120,7 +115,7 @@ const Popup = ({ showForm, setShowForm }) => {
                   type="button"
                   onClick={() => {
                     setShowForm(false);
-                    setAddedUser([]);
+                    setAddedUser([user._id]);
                   }}
                   className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-4 py-3 rounded-lg transition-colors duration-200 border border-gray-300"
                 >

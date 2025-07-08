@@ -201,13 +201,23 @@ export const acceptFriendReq = async (req, res) => {
     await User.findByIdAndUpdate(myId, {
       $push: {friends: friendId}
     },{new: true},)
-    const newChat = new Chat({
-      chatName: "DM",
-      isGroupChat: false,
-      chatMember: [myId, friendId],
-      chatAdmin: [myId, friendId],
-    });
-    await newChat.save();
+
+    const ch = Chat.find({
+      $and: [
+        {isGroupChat: false},
+        {chatMember: { $all: [myId, friendId] } },
+      ]
+    })
+    if(!ch)
+    {
+      const newChat = new Chat({
+        chatName: "DM",
+        isGroupChat: false,
+        chatMember: [myId, friendId],
+        chatAdmin: [myId, friendId],
+      });
+      await newChat.save();
+    }
     return res.status(200).json({ message: "Friend Request Accepted" });
   } catch (error) {
     console.log(error)

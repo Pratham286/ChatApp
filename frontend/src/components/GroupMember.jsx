@@ -132,14 +132,13 @@ const GroupMember = ({
             {/* Admin Badge */}
             {isAdmin && (
               <div className="flex items-center bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">
-                <Crown className="h-4 w-4 mr-1" />
                 Admin
               </div>
             )}
             
             {!isAdmin && (
               <div className="flex items-center bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm">
-                <User className="h-4 w-4 mr-1" />
+
                 Member
               </div>
             )}

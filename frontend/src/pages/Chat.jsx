@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useMyContext } from "../context/ContextProvider";
 import { useNavigate } from "react-router-dom";
-import { MessageCircle, Users, Search, Plus, ArrowLeft } from "lucide-react";
+import { MessageCircle, Users, Search, Plus, ArrowLeft, MessageSquarePlus } from "lucide-react";
 import axios from "axios";
 import ChatBar from "../components/ChatBar";
+import Popup from "../components/PopupForm";
 
 const Chat = () => {
   const { user } = useMyContext();
@@ -11,6 +12,7 @@ const Chat = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     const getUserChat = async () => {
@@ -20,7 +22,7 @@ const Chat = () => {
           `http://localhost:3000/chat/userchat`,
           { withCredentials: true }
         );
-        console.log(response.data.chatDetails);
+        // console.log(response.data.chatDetails);
         setUserChats(response.data.chatDetails);
         setError(null);
       } catch (error) {
@@ -44,8 +46,12 @@ const Chat = () => {
   const handleBackToDashboard = () => {
     navigate("/dashboard");
   };
-
+  
+  const handleCreateChat = () => {
+    setShowForm(true);
+  };
   const handleSearchUsers = () => {
+    // setShowForm(true);
     navigate("/searchuser");
   };
 
@@ -68,7 +74,7 @@ const Chat = () => {
           <div className="flex items-center space-x-4">
             <button
               onClick={handleBackToDashboard}
-              className="p-2 rounded-full bg-white shadow-md hover:shadow-lg transition-all duration-200 hover:bg-gray-50"
+              className="p-2 rounded-full bg-white shadow-md hover:shadow-md transition-all duration-200 hover:bg-gray-50"
             >
               <ArrowLeft className="h-5 w-5 text-gray-600" />
             </button>
@@ -82,11 +88,11 @@ const Chat = () => {
             </div>
           </div>
           <button
-            onClick={handleSearchUsers}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl flex items-center space-x-2"
+            onClick={handleCreateChat}
+            className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-xl flex items-center space-x-2"
           >
-            <Plus className="h-5 w-5" />
-            <span className="hidden sm:inline">New Chat</span>
+            <MessageSquarePlus className="h-5 w-5" />
+            <span className="hidden sm:inline">Create Group Chat</span>
           </button>
         </div>
 
@@ -153,7 +159,7 @@ const Chat = () => {
                 </p>
                 <button
                   onClick={handleSearchUsers}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center mx-auto group"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-200 shadow-md hover:shadow-xl flex items-center justify-center mx-auto group"
                 >
                   <Search className="mr-2 h-5 w-5" />
                   Find People to Chat With
@@ -165,7 +171,7 @@ const Chat = () => {
 
         {/* Quick Actions */}
         {userChats.length > 0 && (
-          <div className="mt-12 bg-white rounded-2xl shadow-lg p-8">
+          <div className="mt-12 bg-white rounded-2xl shadow-md p-8">
             <h3 className="text-xl font-bold text-gray-900 mb-6 text-center">
               Quick Actions
             </h3>
@@ -188,6 +194,7 @@ const Chat = () => {
           </div>
         )}
       </div>
+      <Popup showForm={showForm} setShowForm={setShowForm}/>
     </div>
   );
 };

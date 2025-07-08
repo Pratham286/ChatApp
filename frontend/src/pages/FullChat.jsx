@@ -44,7 +44,7 @@ const FullChat = () => {
     socketRef.current.on("userTyping", ({ username }) => {
       setIsOtherTyping(true);
       setTypingUser(username);
-      console.log(username);
+      // console.log(username);
     });
     socketRef.current.on("userStoppedTyping", () => setIsOtherTyping(false));
 
@@ -158,7 +158,7 @@ const FullChat = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex flex-col">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
+      <div className="max-w-4xl px-4 mx-6 bg-emerald-100 shadow-sm border-b border-gray-200 rounded-xl">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -177,9 +177,10 @@ const FullChat = () => {
                 <h2 className="text-xl font-bold text-gray-900">
                   {chat?.chatName || 'Loading...'}
                 </h2>
-                <p className="text-sm text-gray-500">
+                {chat?.isGroupChat && <p className="text-sm text-gray-500">
                   {chat?.chatMember?.length || 0} members
-                </p>
+                </p>}
+                
               </div>
             </div>
           </div>
@@ -187,10 +188,10 @@ const FullChat = () => {
       </div>
 
       {/* Messages Container */}
-      <div className="flex-1 max-w-4xl mx-auto w-full px-4 py-6">
+      <div className="flex-1 max-w-4xl mx-auto w-full px-4 pb-6 pt-1">
         <div className="bg-white rounded-2xl shadow-lg h-full flex flex-col">
           {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-4">
+          <div className="bg-emerald-50 flex-1 overflow-y-auto p-6 space-y-4 rounded-2xl">
             {chat?.chatMessage?.length ? (
               chat.chatMessage.map((msg, i) => {
                 const isMyMessage = String(msg.sender?._id) === String(user._id);
@@ -201,7 +202,7 @@ const FullChat = () => {
                     onMouseEnter={() => setHoveredMessage(i)}
                     onMouseLeave={() => setHoveredMessage(null)}
                   >
-                    <div className="flex items-center space-x-2 group">
+                    <div className="flex items-center space-x-2">
                       {/* Action Button - Show on left for my messages */}
                       {isMyMessage && !msg.deleted && (
                         <button
@@ -218,7 +219,7 @@ const FullChat = () => {
                       )}
 
                       <div
-                        className={`relative max-w-[75%] rounded-2xl px-4 py-3 shadow-sm ${
+                        className={`relative rounded-2xl px-5 py-2 shadow-sm ${
                           isMyMessage
                             ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white"
                             : "bg-gray-100 text-gray-900"
@@ -232,7 +233,7 @@ const FullChat = () => {
                             <p className={`text-xs mt-1 ${
                               isMyMessage ? 'text-blue-100' : 'text-gray-500'
                             }`}>
-                              {isMyMessage ? "You" : msg.sender?.username || "Unknown"}
+                              {!isMyMessage && msg.sender?.username}
                             </p>
                           </div>
                         ) : (
@@ -248,7 +249,7 @@ const FullChat = () => {
                             <p className={`text-xs mt-1 ${
                               isMyMessage ? 'text-blue-100' : 'text-gray-500'
                             }`}>
-                              {isMyMessage ? "You" : msg.sender?.username || "Unknown"}
+                              {!isMyMessage && msg.sender?.username}
                             </p>
                           </div>
                         )}
