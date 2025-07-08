@@ -10,10 +10,11 @@ import { Server } from "socket.io";
 import http from "http";
 import chatRoutes from "./routes/chatRoute.js";
 import messageRoutes from "./routes/messageRoute.js";
-import { Message } from "./model/Message.js";
+// import { Message } from "./model/message.js";
 import { Chat } from "./model/chat.js";
 import { decodeTokenFromString } from "./utils/jwtUtils.js";
 import { parse } from "cookie";
+import { Message } from "./model/Message.js";
 
 
 const app = express();
