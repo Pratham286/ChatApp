@@ -5,7 +5,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 // import FriendBox from '../components/friendbox';
 
 import { Users, UserCheck, ArrowLeft } from 'lucide-react';
-import FriendBox from '../components/friendbox';
+// import FriendBox from '../components/friendbox';
+import FriendBox from '../components/FriendBox';
 import { useMyContext } from '../context/ContextProvider';
 // import friendbox from '../components/FriendBox';
 
