@@ -1,7 +1,8 @@
 //checked
 import React from 'react';
 import { useMyContext } from '../context/ContextProvider';
-import FriendBox from '../components/friendbox';
+// import FriendBox from '../components/friendbox';
+import FriendBox from '../components/FriendBox'
 import { useNavigate } from 'react-router-dom';
 import { 
   UserPlus, 
