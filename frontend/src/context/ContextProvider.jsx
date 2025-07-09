@@ -4,7 +4,8 @@ const MyContext = createContext();
 
 export const MyProvider = ({ children }) => {
   // const url = "http://localhost/3000";
-  const url = "http://localhost:3000";
+  // const url = "http://localhost:3000";
+  const url = "https://chatapp-7xzn.onrender.com";
   // const url = "https://localhost/3000"
 
   const [isLogin, setIsLogin] = useState(false);
