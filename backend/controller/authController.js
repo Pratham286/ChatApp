@@ -102,8 +102,8 @@ export const loginFunction = async (req, res) => {
 
         res.cookie("token", token, {
             httpOnly: true,
-            secure: false,
-            sameSite : "Lax",
+            secure: true,
+            sameSite : "None",
             maxAge: 60 * 60 * 1000,
         })
         return res.status(200).json({ message: "Login Successful", token, userDetails : user});
