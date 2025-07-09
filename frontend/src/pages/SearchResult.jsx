@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import SearchedUserProfile from '../components/SearchedUserProfile';
 import axios from 'axios';
 import { Search, Users, ArrowLeft, UserSearch } from 'lucide-react';
+import { useMyContext } from '../context/ContextProvider';
 
 const SearchResult = () => {
   const location = useLocation();
@@ -12,6 +13,8 @@ const SearchResult = () => {
   const [userList, setUserList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+
+  const {url} = useMyContext();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -24,7 +27,7 @@ const SearchResult = () => {
       setIsLoading(true);
       try {
         const response = await axios.post(
-          `http://localhost:3000/dashboard/searchall`,
+          `${url}/dashboard/searchall`,
           { word },
           { withCredentials: true }
         );

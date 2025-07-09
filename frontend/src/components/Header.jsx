@@ -19,13 +19,13 @@ const Header = () => {
   const navigate = useNavigate();
   const { isLogin, setIsLogin } = useMyContext();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { user } = useMyContext();
+  const { user,url } = useMyContext();
   // const [req, setReq] = useState(0);
   // console.log(user.friendrequestreceived);
   // console.log(user?.friendrequestrecieved)
   const handleLogout = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/auth/logout`, {
+      const response = await axios.get(`${url}/auth/logout`, {
         withCredentials: true,
       });
       setIsLogin(false);

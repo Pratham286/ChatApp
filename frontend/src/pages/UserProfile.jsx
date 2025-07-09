@@ -23,7 +23,7 @@ const UserProfile = () => {
   const location = useLocation();
   const { userId } = location.state || {};
   const [otherUser, setOtherUser] = useState();
-  const { user, setUser, friendState, setFriendState } = useMyContext();
+  const { user, setUser, friendState, setFriendState, url } = useMyContext();
   const [trigger, setTrigger] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +35,7 @@ const UserProfile = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:3000/dashboard/getuser/${userId}`,
+          `${url}/dashboard/getuser/${userId}`,
           { withCredentials: true }
         );
         console.log(response.data.userDetails);
@@ -55,7 +55,7 @@ const UserProfile = () => {
     const handle = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/dashboard/verify`,
+          `${url}/dashboard/verify`,
           {
             withCredentials: true,
           }
@@ -115,7 +115,7 @@ const UserProfile = () => {
   const handleRequest = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/dashboard/sendfriendreq/${otherUser._id}`,
+        `${url}/dashboard/sendfriendreq/${otherUser._id}`,
         { withCredentials: true }
       );
       console.log(response.data);
@@ -128,7 +128,7 @@ const UserProfile = () => {
   const handleCancel = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/dashboard/cancelfriendreq/${otherUser._id}`,
+        `${url}/dashboard/cancelfriendreq/${otherUser._id}`,
         { withCredentials: true }
       );
       console.log(response.data);
@@ -141,7 +141,7 @@ const UserProfile = () => {
   const handleAccept = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/dashboard/acceptfriendreq/${otherUser._id}`,
+        `${url}/dashboard/acceptfriendreq/${otherUser._id}`,
         { withCredentials: true }
       );
       console.log(response.data);
@@ -154,7 +154,7 @@ const UserProfile = () => {
   const handleUnfriend = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/dashboard/unfriendreq/${otherUser._id}`,
+        `${url}/dashboard/unfriendreq/${otherUser._id}`,
         { withCredentials: true }
       );
       console.log(response.data);
@@ -167,7 +167,7 @@ const UserProfile = () => {
   const handleDecline = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/dashboard/declinefriendreq/${otherUser._id}`,
+        `${url}/dashboard/declinefriendreq/${otherUser._id}`,
         { withCredentials: true }
       );
       console.log(response.data);

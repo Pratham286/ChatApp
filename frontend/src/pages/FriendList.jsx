@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { Users, UserCheck, ArrowLeft } from 'lucide-react';
 import FriendBox from '../components/friendbox';
+import { useMyContext } from '../context/ContextProvider';
 // import friendbox from '../components/FriendBox';
 
 const FriendList = () => {
@@ -16,12 +17,14 @@ const FriendList = () => {
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
+    const {url} =useMyContext();
+
     useEffect(() => {
         const getUser = async () => {
             try {
                 setIsLoading(true);
                 const response = await axios.get(
-                    `http://localhost:3000/dashboard/getuser/${userId}`,
+                    `${url}/dashboard/getuser/${userId}`,
                     { withCredentials: true }
                 );
                 setUserDetails(response.data.userDetails);

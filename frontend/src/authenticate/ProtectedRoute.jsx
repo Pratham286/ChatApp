@@ -11,7 +11,8 @@ const ProtectedRoute = () => {
     const handle = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/dashboard/verify`,
+          `${url}/dashboard/verify`,
+          // `http://localhost:3000/dashboard/verify`,
           {
             withCredentials: true,
           }

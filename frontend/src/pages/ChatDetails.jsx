@@ -18,7 +18,7 @@ import {
 const ChatDetails = () => {
   const location = useLocation();
   const [isUserAdmin, setIsUserAdmin] = useState(false);
-  const { user } = useMyContext();
+  const { user, url } = useMyContext();
   const { chat } = location.state || {};
   console.log(chat);
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ const ChatDetails = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:3000/chat/get/${chat._id}`,
+        `${url}/chat/get/${chat._id}`,
         {
           withCredentials: true,
         }
@@ -97,7 +97,7 @@ const ChatDetails = () => {
       };
       
       const response = await axios.put(
-        `http://localhost:3000/chat/addgroup/${chat._id}`,
+        `${url}/chat/addgroup/${chat._id}`,
         groupData,
         { withCredentials: true }
       );

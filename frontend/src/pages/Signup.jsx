@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MessageCircle, Eye, EyeOff, User, Mail, Lock, ArrowRight } from "lucide-react";
+import { useMyContext } from "../context/ContextProvider";
 
 const Signup = () => {
   const [form, setForm] = useState({
@@ -16,6 +17,7 @@ const Signup = () => {
 
   const navigate = useNavigate();
 
+  const {url} = useMyContext();
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -57,7 +59,7 @@ const Signup = () => {
           password: form.password,
         };
         const response = await axios.post(
-          `http://localhost:3000/auth/signup`,
+          `${url}/auth/signup`,
           formData
         );
 

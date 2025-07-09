@@ -12,7 +12,7 @@ const FullChat = () => {
   const { chatId } = location.state || {};
   const [chat, setChat] = useState();
   const [messageText, setMessageText] = useState("");
-  const { user } = useMyContext();
+  const { user, url } = useMyContext();
 
   const socketRef = useRef();
   const messagesEndRef = useRef();
@@ -32,7 +32,7 @@ const FullChat = () => {
 
   // console.log(chatId);
   useEffect(() => {
-    socketRef.current = io("http://localhost:3000", {
+    socketRef.current = io(`${url}`, {
       withCredentials: true,
     });
 
@@ -91,7 +91,7 @@ const FullChat = () => {
     const getChat = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/chat/get/${chatId}`,
+          `${url}/chat/get/${chatId}`,
           { withCredentials: true }
         );
         console.log(response.data.chatDetails);

@@ -7,7 +7,7 @@ import ChatBar from "../components/ChatBar";
 import Popup from "../components/PopupForm";
 
 const Chat = () => {
-  const { user } = useMyContext();
+  const { user, url } = useMyContext();
   const [userChats, setUserChats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -19,7 +19,7 @@ const Chat = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:3000/chat/userchat`,
+          `${url}/chat/userchat`,
           { withCredentials: true }
         );
         // console.log(response.data.chatDetails);

@@ -3,12 +3,16 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { MessageCircle, Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
+import { useMyContext } from '../context/ContextProvider';
 
 const Login = () => {
     const [form, setForm] = useState({
         email: "",
         password: "",
     });
+
+    const {url} = useMyContext();
+    // console.log(url)
 
     const navigate = useNavigate();
 
@@ -41,7 +45,8 @@ const Login = () => {
                     email: form.email,
                     password: form.password
                 };
-                const response = await axios.post(`http://localhost:3000/auth/login`, formData, { withCredentials: true });
+                const response = await axios.post(`${url}/auth/login`, formData, { withCredentials: true });
+                // const response = await axios.post(`http://localhost:3000/auth/login`, formData, { withCredentials: true });
                 if (response.status === 200) {
                     navigate("/dashboard");
                 }

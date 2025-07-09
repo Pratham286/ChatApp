@@ -15,6 +15,8 @@ const SearchUser = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+
+  // const {url} =use
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       const fetchUsers = async () => {
@@ -27,7 +29,7 @@ const SearchUser = () => {
         setIsLoading(true);
         try {
           const response = await axios.post(
-            `http://localhost:3000/dashboard/search`,
+            `${url}/dashboard/search`,
             { word },
             { withCredentials: true }
           );

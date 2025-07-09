@@ -25,7 +25,7 @@ const GroupMember = ({
   const [showAction, setShowAction] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isSameUser, setIsSameUser] = useState(false);
-  const { user } = useMyContext();
+  const { user, url } = useMyContext();
 
   useEffect(() => {
     if (userId === user._id) {
@@ -41,7 +41,7 @@ const GroupMember = ({
     try {
       setLoading(true);
       const response = await axios.put(
-        `http://localhost:3000/chat/makegroupadmin/${chatId}`,
+        `${url}/chat/makegroupadmin/${chatId}`,
         { userId: userId },
         { withCredentials: true }
       );
@@ -62,7 +62,7 @@ const GroupMember = ({
     try {
       setLoading(true);
       const response = await axios.put(
-        `http://localhost:3000/chat/removegroupadmin/${chatId}`,
+        `${url}/chat/removegroupadmin/${chatId}`,
         { userId: userId },
         { withCredentials: true }
       );
@@ -83,7 +83,7 @@ const GroupMember = ({
     try {
       setLoading(true);
       const response = await axios.put(
-        `http://localhost:3000/chat/removeuser/${chatId}`,
+        `${url}/chat/removeuser/${chatId}`,
         { userId: userId },
         { withCredentials: true }
       );

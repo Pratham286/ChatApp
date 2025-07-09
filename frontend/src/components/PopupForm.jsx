@@ -7,8 +7,9 @@ import { useNavigate } from "react-router-dom";
 
 const Popup = ({ showForm, setShowForm }) => {
   const [groupName, setGroupName] = useState("");
-  const { user } = useMyContext();
+  const { user, url } = useMyContext();
   const [addedUser, setAddedUser] = useState([user._id]);
+  
   //   console.log(user)
   const friends = user.friends;
 
@@ -39,7 +40,7 @@ const Popup = ({ showForm, setShowForm }) => {
             chatName: groupName,
         }
         try {
-            const response = await axios.post(`http://localhost:3000/chat/create`, groupData, {withCredentials: true});
+            const response = await axios.post(`${url}/chat/create`, groupData, {withCredentials: true});
 
             // console.log("created");
             if(response.status === 200)
